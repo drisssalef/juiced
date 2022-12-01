@@ -6,6 +6,7 @@ import java.util.List;
 
 @Entity(name = "juice")
 public class Juice {
+    //driss
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int juice_id;
