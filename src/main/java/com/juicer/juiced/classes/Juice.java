@@ -1,39 +1,36 @@
 package com.juicer.juiced.classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity(name = "juice")
 public class Juice {
-    //driss
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int juice_id;
-    private double juice_price;
+    private double price_juice;
     private String description_fruit;
-    private Boolean visible_juice;
 
-    @Lob   //large object helpt Jpa met veel data
-    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
-    private byte[] speaker_photo;
+    @Column(name = "visible_juice")
+    private Boolean visibleJuice;
+
+    private byte[] photo_juice;
 
     @ManyToMany
     @JoinTable(
             name = "fruit_juice",
-            joinColumns = @JoinColumn(name ="juiced_id"),
+            joinColumns = @JoinColumn(name ="juice_id"),
             inverseJoinColumns = @JoinColumn(name="fruit_id")
     )
-
     private List<Fruit> fruits;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "juice_orders",
-            joinColumns = @JoinColumn(name ="juice_id"),
-            inverseJoinColumns = @JoinColumn(name = "orders_id")
-    )
+
+    @ManyToMany(mappedBy = "juices")
+    @JsonIgnore
     private List<Orders> orders;
 
 
@@ -48,12 +45,12 @@ public class Juice {
     public Juice() {
     }
 
-    public byte[] getSpeaker_photo() {
-        return speaker_photo;
+    public byte[] getPhoto_juice() {
+        return photo_juice;
     }
 
-    public void setSpeaker_photo(byte[] speaker_photo) {
-        this.speaker_photo = speaker_photo;
+    public void setPhoto_juice(byte[] photo_juice) {
+        this.photo_juice = photo_juice;
     }
 
     public List<Fruit> getFruits() {
@@ -72,12 +69,12 @@ public class Juice {
         this.juice_id = juice_id;
     }
 
-    public double getJuice_price() {
-        return juice_price;
+    public double getPrice_juice() {
+        return price_juice;
     }
 
-    public void setJuice_price(double juice_price) {
-        this.juice_price = juice_price;
+    public void setPrice_juice(double price_juice) {
+        this.price_juice = price_juice;
     }
 
     public String getDescription_fruit() {
@@ -89,10 +86,10 @@ public class Juice {
     }
 
     public Boolean getVisible_juice() {
-        return visible_juice;
+        return visibleJuice;
     }
 
     public void setVisible_juice(Boolean visible_juice) {
-        this.visible_juice = visible_juice;
+        this.visibleJuice = visible_juice;
     }
 }

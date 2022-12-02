@@ -14,7 +14,12 @@ public class Orders {
     private String orders_product_desc;
     private Boolean order_is_paid;
 
-    @ManyToMany(mappedBy = "orders")
+    @ManyToMany
+    @JoinTable(
+            name = "juice_orders",
+            joinColumns = @JoinColumn(name ="orders_id"),
+            inverseJoinColumns = @JoinColumn(name = "juice_id")
+    )
     private List<Juice> juices;
 
     public Orders() {

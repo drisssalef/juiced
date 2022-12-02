@@ -1,5 +1,6 @@
 package com.juicer.juiced.classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
@@ -13,13 +14,11 @@ public class Fruit {
     private String fruit_name;
     private double price_fruit;
     private String description_fruit;
-
-    @Lob
-    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
     private byte[] photo_fruit;
 
 
     @ManyToMany(mappedBy = "fruits")
+    @JsonIgnore
     private List<Juice> juices;
 
 
