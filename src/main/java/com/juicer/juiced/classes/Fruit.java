@@ -1,12 +1,14 @@
 package com.juicer.juiced.classes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
 import java.util.List;
 
 @Entity(name="fruit")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Fruit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

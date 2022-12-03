@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/avi/fruit")
+@RequestMapping("/api/v1/fruit")
 public class FruitController {
 
     @Autowired
@@ -29,6 +29,11 @@ public class FruitController {
     @PostMapping
     public Fruit create(@RequestBody final Fruit fruit){
         return fruitRepositorie.saveAndFlush(fruit);
+    }
+
+    @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
+    public void delete(@PathVariable int id){
+        fruitRepositorie.deleteById(id);
     }
 
     @RequestMapping(value = "{id}",method = RequestMethod.PUT)

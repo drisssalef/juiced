@@ -1,10 +1,12 @@
 package com.juicer.juiced.classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity(name = "orders")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +14,7 @@ public class Orders {
 
     private int orders_nummer;
     private String orders_product_desc;
-    private Boolean order_is_paid;
+    private Boolean orders_is_paid;
 
     @ManyToMany
     @JoinTable(
@@ -49,11 +51,19 @@ public class Orders {
         this.orders_product_desc = orders_product_desc;
     }
 
-    public Boolean getOrder_is_paid() {
-        return order_is_paid;
+    public Boolean getOrders_is_paid() {
+        return orders_is_paid;
     }
 
-    public void setOrder_is_paid(Boolean order_is_paid) {
-        this.order_is_paid = order_is_paid;
+    public void setOrders_is_paid(Boolean orders_is_paid) {
+        this.orders_is_paid = orders_is_paid;
+    }
+
+    public List<Juice> getJuices() {
+        return juices;
+    }
+
+    public void setJuices(List<Juice> juices) {
+        this.juices = juices;
     }
 }
