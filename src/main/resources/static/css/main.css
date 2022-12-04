@@ -1,0 +1,21 @@
+
+body{
+    background-color: antiquewhite;
+}
+
+nav{
+    margin: 3%;
+
+}
+
+thead{
+    margin: 2%;
+}
+
+th{
+    margin: 2%;
+}
+
+button{
+  background-color: white;
+}

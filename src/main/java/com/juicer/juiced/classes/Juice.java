@@ -30,7 +30,6 @@ public class Juice {
     private List<Fruit> fruits;
 
 
-
     @ManyToMany(mappedBy = "juices")
     @JsonIgnore
     private List<Orders> orders;

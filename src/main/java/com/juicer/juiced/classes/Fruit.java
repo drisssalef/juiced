@@ -24,6 +24,7 @@ public class Fruit {
     private List<Juice> juices;
 
 
+
     public Fruit() {
     }
 
