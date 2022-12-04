@@ -21,10 +21,9 @@
                <h1>juice</h1>
            </div>
        </nav>
-
+       <span th:text="'fruit:'+ ${f_id}" />
        <h2>Fruiten voor een juice te maken </h2>
-
-               <table class="table table-dark table-hover">
+       <table class="table table-dark table-hover">
                    <thead>
                    <tr>
 
@@ -42,10 +41,27 @@
                      <th:block th:each="fruit : ${fruits}">
                          <tr>
                              <td>[[${fruit.fruit_name}]]</td>
-                             <td>[[${fruit.photo_fruit}]]</td>
+                             <td>[[${fruit.fruit_id}]]</td>
                              <td>[[${fruit.description_fruit}]]</td>
                              <td>[[${fruit.price_fruit}]]</td>
-                             <td><button>Add</button> <button>Delete</button></td>
+                             <td>
+
+                                 <input  type="button"
+                                         th:data-id="${fruit.fruit_id}"
+                                         th:data-name="${fruit.fruit_name}"
+                                         th:data-price="${fruit.price_fruit}"
+                                         th:data-description="${fruit.description_fruit}"
+                                         onclick="addFruitToList(this.getAttribute('data-id'), this.getAttribute('data-name'),this.getAttribute('data-price'),this.getAttribute('data-description'));"
+                                         value="add" />
+
+                                 <input  type="button"
+                                         th:data-id="${fruit.fruit_id}"
+                                         onclick="removeFruitFromList(this.getAttribute('data-id'));"
+                                         value="remove" />
+
+                             </td>
+
+                             </td>
                          </tr>
 
                      </th:block>
@@ -53,7 +69,17 @@
 
                    </tbody>
                </table>
-       //-------------------------juice table--------------------------------
+
+           //-------------------------juice table--------------------------------
+       <ul id="fruitCurrentJuice"></ul>
+       <input  type="button"
+               onclick="createJuice()"
+               value="Create Juice" />
+
+
+       <div id="createdJuice"></div>
+
+
 
        <h2>Aangemaakte Juice </h2>
 
