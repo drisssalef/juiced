@@ -102,7 +102,18 @@
                    <td>[[${juice.description_fruit}]]</td>
                    <td>[[${juice.photo_juice}]]</td>
                    <td>[[${juice.price_juice}]]</td>
-                   <td><button>Add</button> <button>Delete</button></td>
+                   <td>
+                       <input  type="button"
+                               th:juice_id="${juice.juice_id}"
+                               th:price_juice="${juice.price_juice}"
+                               th:description_fruit="${juice.description_fruit}"
+                               onclick="addPreparedJuicetolist(this.getAttribute('juice_id'), this.getAttribute('price_juice'),this.getAttribute('description_fruit'));"
+                               value="add" />
+
+
+
+                   </td>
+
                </tr>
 
            </th:block>
@@ -112,6 +123,13 @@
 
        //-------------------------Order Table-------------------------
 
+       <h2>Order</h2>
+
+       <input  type="button"
+               onclick="createOrders()"
+               value="Add juice to Order" />
+
+       <div id="orderlist"></div>
 
 
    </div>

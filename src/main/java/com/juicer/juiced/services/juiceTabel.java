@@ -52,6 +52,8 @@ public class juiceTabel {
         model.addAttribute("juices" ,visibleJuice);
         //model.addAttribute("orderService", orderService);
 
+        List<Orders> orders = new ArrayList<>();
+        model.addAttribute("orders",orders);
 
         return "helloworld";
     }
