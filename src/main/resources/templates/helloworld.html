@@ -187,8 +187,9 @@
    </section>
    <script>
        $(function () {
+           //Stripe public key
            var API_KEY = "pk_test_51MC7QvBKEWHgG6Uk7GJS4MR36VjNumsyAlUozOh3CoTbu2KhPnoBiR6FBq0aa7CRqgURuie1WrrQBs1hK9rUn4EZ00sovBJC8J"
-           // Create a Stripe client.
+           // Create a Stripe client. (stripe library)
            var stripe = Stripe(API_KEY);
 
            // Create an instance of Elements.
@@ -200,7 +201,7 @@
            // Add an instance of the card Element into the `card-element` <div>.
            card.mount('#card-element');
 
-           // Handle real-time validation errors from the card Element.
+           // Handle real-time validation errors from the card Element.   fout met kaart
            card.addEventListener('change', function (event) {
                var displayError = document.getElementById('card-errors');
                if (event.error) {
@@ -233,8 +234,14 @@
                            "/create-charge",
                            {email: email, token: token, amount: tottaleprijs},
                            function (data) {
-                               alert(data);
+                               alert("SUCCESS");
                            }, 'json');
+                     /*$.post(
+                           "/api/v1/orders",
+                           JSON.stringify(orders[0]),
+                           function (data) {
+
+                           }, 'json');*/
                    }
                });
            }

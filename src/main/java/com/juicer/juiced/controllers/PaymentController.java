@@ -47,11 +47,6 @@ public class PaymentController {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-    @GetMapping("/subscription")
-    public String subscriptionPage(Model model) {
-        model.addAttribute("stripePublicKey", API_PUBLIC_KEY);
-        return "subscription";
-    }
 
     @GetMapping("/charge")
     public String chargePage(Model model) {
@@ -61,107 +56,26 @@ public class PaymentController {
 
     /*========== REST APIs for Handling Payments ===================*/
 
-    @PostMapping("/create-subscription")
-    public @ResponseBody
-    Response createSubscription(String email, String token, String plan, String coupon) {
-        //validate data
-        if (token == null || plan.isEmpty()) {
-            Response res = new Response();
-            res.setMessage("Stripe payment token is missing. Please, try again later.");
-            res.setError();
-            return res;
-        }
-
-        //create customer first
-        String customerId = stripeService.createCustomer(email, token);
-
-        if (customerId == null) {
-            Response res = new Response();
-            res.setMessage("An error occurred while trying to create a customer.");
-            res.setError();
-            return res;
-        }
-
-        //create subscription
-        String subscriptionId = stripeService.createSubscription(customerId, plan, coupon);
-        if (subscriptionId == null) {
-            Response res = new Response();
-            res.setMessage("An error occurred while trying to create a subscription.");
-            res.setError();
-            return res;
-        }
-
-        // Ideally you should store customerId and subscriptionId along with customer object here.
-        // These values are required to update or cancel the subscription at a later stage.
-
-        Response res = new Response();
-        res.setMessage("Success! Your subscription id is " + subscriptionId);
-        return res;
-
-    }
-
-    @PostMapping("/cancel-subscription")
-    public @ResponseBody
-    Response cancelSubscription(String subscriptionId) {
-        boolean status = stripeService.cancelSubscription(subscriptionId);
-        if (!status) {
-            Response res = new Response();
-            res.setMessage("Failed to cancel the subscription. Please, try later.");
-            res.setError();
-            return res;
-        }
-
-        Response res = new Response();
-        res.setMessage("Subscription cancelled successfully.");
-        return res;
-    }
-
-    @PostMapping("/coupon-validator")
-    public @ResponseBody
-    Response couponValidator(String code) {
-        Coupon coupon = stripeService.retrieveCoupon(code);
-        if (coupon != null && coupon.getValid()) {
-            String details = (coupon.getPercentOff() == null ? "$" + (coupon.getAmountOff() / 100) : coupon.getPercentOff() + "%") +
-                    " OFF " + coupon.getDuration();
-
-            Response res = new Response();
-            res.setMessage(details);
-            return res;
-
-        } else {
-
-            Response res = new Response();
-            res.setMessage("This coupon code is not available. This may be because it has expired or has "+  "already been applied to your account.");
-            res.setError();
-            return res;
-        }
-    }
 
     @PostMapping("/create-charge")
     public @ResponseBody
     ResponseEntity<String> createCharge(String email, String token, int amount) {
         //validate data
         if (token == null) {
-            Response res = new Response();
-            res.setMessage( "Stripe payment token is missing. Please, try again later.");
-            res.setError();
+
             return ResponseEntity.internalServerError().body("Stripe payment token is missing. Please, try again later.");
 
         }
 
         //create charge
-        String chargeId = stripeService.createCharge(email, token, amount*100); //$9.99 USD
+        String chargeId = stripeService.createCharge(email, token, amount*100);
         if (chargeId == null) {
-            Response res = new Response();
-            res.setMessage( "An error occurred while trying to create a charge.");
-            res.setError();
             return ResponseEntity.internalServerError().body("An error occurred while trying to create a charge.");
         }
 
         // You may want to store the charge id along with order information
 
-        Response res = new Response();
-        res.setMessage("Success! Your charge id is " + chargeId);
+
         return ResponseEntity.ok("Success! Your charge id is " + chargeId);
     }
 
