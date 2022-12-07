@@ -5,11 +5,6 @@ let orders = [];
 let ordernummer = 0;
 let tottaleprijs = 0 ;
 
-function demo(fruit) {
-    fruitList.push(fruit);
-    console.log(fruitList)
-    createJuice().then(r => console.log("success"));
-}
 
 
 /*------------------------prepared Juice---------------------------*/
@@ -101,6 +96,7 @@ async function createJuice() {
     console.log(data);*/
 }
 
+
 function updateHtmlJuice(){
 
     let list = document.getElementById("createdJuice");
@@ -159,7 +155,9 @@ function updateHTMLorder(){
     orders.forEach((item) => {
 
         let li = document.createElement("li");
-        li.innerText = "Order nummer=" + item.orders_nummer + " TottalePrijs = " + tottaleprijs;
+        //<p class="lead">USD 9.99</p>
+        li.innerHTML = `<span> order nummer ${item.orders_nummer} Total price: <p class="lead"> USD ${tottaleprijs}</p> </span>`
+        //li.innerText = "Order nummer=" + item.orders_nummer + " TottalePrijs = " + tottaleprijs;
         list.appendChild(li);
 
         /*item.juices.forEach((item) => {
@@ -173,8 +171,6 @@ function updateHTMLorder(){
     //tottaleprijs = 0;
 
 }
-
-
 
 
 

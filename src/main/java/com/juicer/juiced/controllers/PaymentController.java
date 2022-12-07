@@ -4,11 +4,20 @@ import com.juicer.juiced.services.StripeService;
 import com.stripe.model.Coupon;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @Controller
@@ -22,11 +31,22 @@ public class PaymentController {
         this.stripeService = stripeService;
     }
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public String homepage() {
         return "homepage";
+    }*/
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        // Don't do this in production, use a proper list  of allowed origins
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
-
     @GetMapping("/subscription")
     public String subscriptionPage(Model model) {
         model.addAttribute("stripePublicKey", API_PUBLIC_KEY);
@@ -119,30 +139,30 @@ public class PaymentController {
 
     @PostMapping("/create-charge")
     public @ResponseBody
-    Response createCharge(String email, String token) {
+    ResponseEntity<String> createCharge(String email, String token, int amount) {
         //validate data
         if (token == null) {
             Response res = new Response();
             res.setMessage( "Stripe payment token is missing. Please, try again later.");
             res.setError();
-            return res;
+            return ResponseEntity.internalServerError().body("Stripe payment token is missing. Please, try again later.");
 
         }
 
         //create charge
-        String chargeId = stripeService.createCharge(email, token, 999); //$9.99 USD
+        String chargeId = stripeService.createCharge(email, token, amount*100); //$9.99 USD
         if (chargeId == null) {
             Response res = new Response();
             res.setMessage( "An error occurred while trying to create a charge.");
             res.setError();
-            return res;
+            return ResponseEntity.internalServerError().body("An error occurred while trying to create a charge.");
         }
 
         // You may want to store the charge id along with order information
 
         Response res = new Response();
         res.setMessage("Success! Your charge id is " + chargeId);
-        return res;
+        return ResponseEntity.ok("Success! Your charge id is " + chargeId);
     }
 
 }
